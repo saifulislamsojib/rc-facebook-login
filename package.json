@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/"
+    "url": "https://github.com/saifulislamsojib/rc-facebook-login"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
