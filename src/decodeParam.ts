@@ -3,10 +3,10 @@
  *
  * @param      {String} paramString The encoded parameter string
  * @param      {String} key The target key
- * @return     {Object} Decoded value for given parameter key
+ * @return     {String} Decoded value for given parameter key
  */
 
-export default (paramString, key) => {
+const decodeParam = (paramString: string, key: string): string => {
   return decodeURIComponent(
     paramString.replace(
       new RegExp(
@@ -19,3 +19,5 @@ export default (paramString, key) => {
     )
   );
 };
+
+export default decodeParam;

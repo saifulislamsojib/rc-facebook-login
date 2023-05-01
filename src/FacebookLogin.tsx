@@ -1,14 +1,17 @@
 import PropTypes from "prop-types";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { MouseEvent, useCallback, useEffect, useRef, useState } from "react";
 import decodeParamForKey from "./decodeParam";
 import getParamsFromObject from "./objectToParams";
+import { ReactFacebookLoginProps } from "./types/facebook";
 
 const getIsMobile = () => {
   let isMobile = false;
 
   try {
     isMobile = !!(
-      (window.navigator && window.navigator.standalone) ||
+      (window.navigator &&
+        "standalone" in window.navigator &&
+        window.navigator.standalone) ||
       navigator.userAgent.match("CriOS") ||
       navigator.userAgent.match(/mobile/i)
     );
@@ -19,7 +22,7 @@ const getIsMobile = () => {
   return isMobile;
 };
 
-const Facebook = (props) => {
+const FacebookLogin = (props: ReactFacebookLoginProps) => {
   const {
     redirectUri = typeof window !== "undefined" ? window.location.href : "/",
     scope = "public_profile,email",
@@ -45,13 +48,13 @@ const Facebook = (props) => {
 
   const [isSdkLoaded, setSdkLoaded] = useState(false);
   const [isProcessing, setProcessing] = useState(false);
-  const [autoLoadState, setAutoLoadState] = useState(null);
+  const [autoLoadState, setAutoLoadState] = useState<boolean | null>(null);
 
   const isMountedRef = useRef(false);
 
   const responseApi = useCallback(
-    (authResponse) => {
-      window.FB.api("/me", { locale: language, fields: fields }, (me) => {
+    (authResponse: any) => {
+      window.FB.api("/me", { locale: language, fields: fields }, (me: any) => {
         Object.assign(me, authResponse);
         callback(me);
       });
@@ -60,7 +63,7 @@ const Facebook = (props) => {
   );
 
   const checkLoginState = useCallback(
-    (response) => {
+    (response: any) => {
       if (isMountedRef.current) {
         setProcessing(false);
       }
@@ -78,12 +81,12 @@ const Facebook = (props) => {
   );
 
   const checkLoginAfterRefresh = useCallback(
-    (response) => {
+    (response: any) => {
       if (response.status === "connected") {
         checkLoginState(response);
       } else {
         window.FB.login(
-          (loginResponse) => checkLoginState(loginResponse),
+          (loginResponse: any) => checkLoginState(loginResponse),
           true
         );
       }
@@ -126,16 +129,16 @@ const Facebook = (props) => {
 
     const loadSdkAsynchronously = () => {
       ((d, s, id) => {
-        const element = d.getElementsByTagName(s)[0];
+        const element = d.getElementsByTagName(s)[0] as HTMLScriptElement;
         const fjs = element;
         let js = element;
         if (d.getElementById(id)) {
           return;
         }
-        js = d.createElement(s);
+        js = d.createElement(s) as HTMLScriptElement;
         js.id = id;
         js.src = `https://connect.facebook.net/${language}/sdk.js`;
-        fjs.parentNode.insertBefore(js, fjs);
+        fjs.parentNode?.insertBefore(js, fjs);
       })(document, "script", "facebook-jssdk");
     };
 
@@ -175,7 +178,7 @@ const Facebook = (props) => {
     }
   }, [isSdkLoaded, autoLoad, autoLoadState]);
 
-  const click = (e) => {
+  const click = (e: MouseEvent<HTMLButtonElement>) => {
     if (!isSdkLoaded || isProcessing || isDisabled) {
       return;
     }
@@ -212,7 +215,7 @@ const Facebook = (props) => {
         return;
       }
 
-      window.FB.getLoginStatus((response) => {
+      window.FB.getLoginStatus((response: any) => {
         if (response.status === "connected") {
           checkLoginState(response);
         } else {
@@ -240,9 +243,9 @@ const Facebook = (props) => {
   return render(propsForRender);
 };
 
-export default Facebook;
+export default FacebookLogin;
 
-Facebook.propTypes = {
+FacebookLogin.propTypes = {
   isDisabled: PropTypes.bool,
   callback: PropTypes.func.isRequired,
   appId: PropTypes.string.isRequired,
