@@ -19,7 +19,7 @@ yarn add rc-facebook-login
 
     return (
       <FacebookLogin
-        appId={FB_APP_ID}
+        appId={'FB_APP_ID'}
         fields="name,email,picture"
         callback={responseFacebook}
         className="third-party-auth"
@@ -37,7 +37,7 @@ yarn add rc-facebook-login
 
     return (
       <FacebookLogin
-        appId={FB_APP_ID}
+        appId={'FB_APP_ID'}
         fields="name,email,picture"
         callback={responseFacebook}
         render={({ disabled, onClick }) => (
@@ -68,9 +68,9 @@ yarn add rc-facebook-login
     };
 
     const { disabled, onClick } = useFacebookLogin({
-        appId: FB_APP_ID,
-        fields="name,email,picture"
-        callback={responseFacebook}
+      appId: 'FB_APP_ID',
+      fields: "name,email,picture",
+      callback: responseFacebook,
     });
 
     return (
