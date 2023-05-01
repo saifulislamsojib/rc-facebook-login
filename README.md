@@ -1,6 +1,6 @@
-# textmodifier
+# rc-facebook-login
 
-A `react` component for Facebook Login.It's a customizable Facebook Login component.
+A `react` component for Facebook Login. It's a customizable Facebook Login component.
 
 ## install
 
@@ -22,15 +22,71 @@ yarn add rc-facebook-login
         appId={FB_APP_ID}
         fields="name,email,picture"
         callback={responseFacebook}
-        render={({ onClick, isSdkLoaded, isProcessing, isDisabled }) => (
+        className="third-party-auth"
+        icon={<FacebookIcon />} // you can use any icon library for show icon
+     />
+    )
+```
+
+## Customize by render props
+
+```
+    const responseFacebook = (response: ReactFacebookLoginInfo) => {
+        const { name, email, picture, accessToken } = response || {};
+    };
+
+    return (
+      <FacebookLogin
+        appId={FB_APP_ID}
+        fields="name,email,picture"
+        callback={responseFacebook}
+        render={({ disabled, onClick }) => (
             <button
                 onClick={onClick}
+                disabled={disabled}
                 className="third-party-auth"
-                disabled={isProcessing || !isSdkLoaded || isDisabled}
             >
-            Continue with Facebook
+              <span
+                style={{
+                    marginRight: 5,
+                }}
+              >
+                <FacebookIcon />
+              </span>
+              Continue with Facebook
             </button>
         )}
-    />
+      />
+    )
+```
+
+## Using Hook
+
+```
+    const responseFacebook = (response: ReactFacebookLoginInfo) => {
+        const { name, email, picture, accessToken } = response || {};
+    };
+
+    const { disabled, onClick } = useFacebookLogin({
+        appId: FB_APP_ID,
+        fields="name,email,picture"
+        callback={responseFacebook}
+    });
+
+    return (
+      <button
+        onClick={onClick}
+        disabled={disabled}
+        className="third-party-auth"
+      >
+        <span
+            style={{
+                marginRight: 5,
+            }}
+        >
+            <FacebookIcon />
+        </span>
+        Continue with Facebook
+      </button>
     )
 ```

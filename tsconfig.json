@@ -16,7 +16,6 @@
     "strict": true,
     "skipLibCheck": true
   },
-  "files": ["./FB.d.ts"],
   "include": ["./src/*"],
   "exclude": ["node_modules", "./dist/*"]
 }

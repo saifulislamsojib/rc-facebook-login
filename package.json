@@ -1,6 +1,6 @@
 {
   "name": "rc-facebook-login",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A react component for Facebook Login.It's a customizable Facebook Login component.",
   "main": "dist/index.js",
   "repository": {

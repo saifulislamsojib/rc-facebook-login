@@ -1,6 +1,6 @@
-import { CSSProperties, Component, MouseEvent, ReactNode } from "react";
+import { CSSProperties, ElementType, MouseEvent, ReactNode } from "react";
 
-export interface ReactFacebookLoginProps {
+export interface FacebookLoginOptions {
   appId: string;
   callback(
     userInfo: ReactFacebookLoginInfo | ReactFacebookFailureResponse
@@ -23,19 +23,16 @@ export interface ReactFacebookLoginProps {
   state?: string;
   authType?: string;
   responseType?: string;
-  render(props: ReactFacebookLoginRenderProps): JSX.Element;
 }
 
-export interface ReactFacebookLoginWithButtonProps
-  extends ReactFacebookLoginProps {
-  buttonStyle?: CSSProperties;
-  containerStyle?: CSSProperties;
-  cssClass?: string;
+export interface FacebookLoginProps extends FacebookLoginOptions {
+  style?: CSSProperties;
+  className?: string;
   icon?: ReactNode;
-  size?: "small" | "medium" | "metro";
   textButton?: string;
-  typeButton?: string;
-  tag?: Node | Component<any>;
+  typeButton?: "button" | "submit" | "reset";
+  tag?: ElementType;
+  render?(props: ReactFacebookLoginRenderProps): JSX.Element;
 }
 
 export interface ReactFacebookFailureResponse {
@@ -59,8 +56,6 @@ export interface ReactFacebookLoginInfo {
 }
 
 export interface ReactFacebookLoginRenderProps {
-  isSdkLoaded: boolean;
-  isProcessing: boolean;
-  isDisabled: boolean;
+  disabled: boolean;
   onClick?(event: MouseEvent<HTMLButtonElement>): void;
 }
