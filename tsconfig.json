@@ -1,13 +1,10 @@
 {
   "compilerOptions": {
-    // "incremental": true,
     "target": "es2016",
-    // "lib": [],
     "jsx": "react-jsx",
     "module": "commonjs",
     "rootDir": "./src",
     "moduleResolution": "node",
-    // "allowJs": true,
     "declaration": true,
     "outDir": "./dist",
     "removeComments": true,

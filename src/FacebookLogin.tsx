@@ -61,9 +61,9 @@ const FacebookLogin = ({
   },
   ...props
 }: FacebookLoginProps) => {
-  const { disabled, onClick } = useFacebookLogin(props);
+  const renderProps = useFacebookLogin(props);
 
-  return render({ disabled, onClick });
+  return render(renderProps);
 };
 
 export default FacebookLogin;

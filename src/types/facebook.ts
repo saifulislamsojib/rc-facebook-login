@@ -1,19 +1,19 @@
 import { CSSProperties, ElementType, MouseEvent, ReactNode } from "react";
 
-export interface FacebookLoginOptions {
-  appId: string;
-  callback(
-    userInfo: ReactFacebookLoginInfo | ReactFacebookFailureResponse
-  ): void;
-  onFailure?(response: ReactFacebookFailureResponse): void;
+// eslint-disable-next-line no-unused-vars
+type OnClick = (event: MouseEvent<HTMLButtonElement>) => void;
 
+export type FacebookLoginResponse = FacebookLoginInfo | FacebookFailureResponse;
+
+interface FacebookLoginCommonOptions {
+  appId: string;
   autoLoad?: boolean;
   cookie?: boolean;
   disableMobileRedirect?: boolean;
   fields?: string;
   isDisabled?: boolean;
   language?: string;
-  onClick?(event: MouseEvent<HTMLButtonElement>): void;
+  onClick?: OnClick;
   redirectUri?: string;
   scope?: string;
   version?: string;
@@ -25,21 +25,47 @@ export interface FacebookLoginOptions {
   responseType?: string;
 }
 
-export interface FacebookLoginProps extends FacebookLoginOptions {
+interface FacebookLoginWithFailureOptions extends FacebookLoginCommonOptions {
+  callback(
+    // eslint-disable-next-line no-unused-vars
+    response: FacebookLoginInfo
+  ): void;
+  // eslint-disable-next-line no-unused-vars
+  onFailure(response: FacebookFailureResponse): void;
+}
+
+interface FacebookLoginWithOutFailureOptions
+  extends FacebookLoginCommonOptions {
+  callback(
+    // eslint-disable-next-line no-unused-vars
+    response: FacebookLoginResponse
+  ): void;
+  onFailure?: null;
+}
+
+export type FacebookLoginOptions =
+  | FacebookLoginWithFailureOptions
+  | FacebookLoginWithOutFailureOptions;
+
+interface FacebookLoginOnlyComponentProps {
   style?: CSSProperties;
   className?: string;
   icon?: ReactNode;
   textButton?: string;
   typeButton?: "button" | "submit" | "reset";
   tag?: ElementType;
-  render?(props: ReactFacebookLoginRenderProps): JSX.Element;
+  // eslint-disable-next-line no-unused-vars
+  render?(props: FacebookLoginRenderProps): JSX.Element;
 }
 
-export interface ReactFacebookFailureResponse {
+export type FacebookLoginProps = FacebookLoginOnlyComponentProps &
+  FacebookLoginOptions;
+
+export interface FacebookFailureResponse {
   status?: string;
 }
 
-export interface ReactFacebookLoginInfo {
+export interface FacebookLoginInfo {
   id: string;
   userID: string;
   accessToken: string;
@@ -55,7 +81,28 @@ export interface ReactFacebookLoginInfo {
   };
 }
 
-export interface ReactFacebookLoginRenderProps {
+export interface FacebookLoginRenderProps {
   disabled: boolean;
-  onClick?(event: MouseEvent<HTMLButtonElement>): void;
+  isDisabled: boolean;
+  isProcessing: boolean;
+  isSdkLoaded: boolean;
+  onClick: OnClick;
+}
+
+export interface LoginStatusResponse {
+  status: "connected" | "not_authorized" | "unknown";
+  authResponse?: {
+    accessToken: string;
+    expiresIn: Date | string;
+    reauthorize_required_in: Date | string;
+    signedRequest: any;
+    userID: string;
+  };
+}
+
+export interface FB {
+  api: any;
+  login: any;
+  init: any;
+  getLoginStatus: any;
 }

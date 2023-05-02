@@ -1,7 +1,7 @@
 {
   "name": "rc-facebook-login",
-  "version": "1.0.4",
-  "description": "A react component for Facebook Login.It's a customizable Facebook Login component.",
+  "version": "1.0.5",
+  "description": "A react component for Facebook Login. It's a customizable Facebook Login component.",
   "main": "dist/index.js",
   "repository": {
     "type": "git",
@@ -16,6 +16,8 @@
   "devDependencies": {
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.1",
+    "@typescript-eslint/eslint-plugin": "^5.59.2",
+    "@typescript-eslint/parser": "^5.59.2",
     "eslint": "^8.39.0",
     "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-react-hooks": "^4.6.0",

@@ -1,9 +1,12 @@
-export { default as default } from "./FacebookLogin";
+import FacebookLogin from "./FacebookLogin";
+export default FacebookLogin;
+
 export { default as useFacebookLogin } from "./hooks/useFacebookLogin";
 export {
   FacebookLoginOptions,
   FacebookLoginProps,
-  ReactFacebookFailureResponse,
-  ReactFacebookLoginInfo,
-  ReactFacebookLoginRenderProps,
+  FacebookLoginResponse,
+  FacebookFailureResponse,
+  FacebookLoginInfo,
+  FacebookLoginRenderProps,
 } from "./types/facebook";

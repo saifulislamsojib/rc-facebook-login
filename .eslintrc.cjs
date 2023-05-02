@@ -5,6 +5,7 @@ module.exports = {
     "plugin:react/recommended",
     "plugin:react/jsx-runtime",
     "plugin:react-hooks/recommended",
+    "plugin:@typescript-eslint/recommended",
   ],
   parserOptions: {
     sourceType: "module",
@@ -18,10 +19,11 @@ module.exports = {
       version: "detect",
     },
   },
-  plugins: ["react", "react-hooks"],
+  plugins: ["react", "react-hooks", "@typescript-eslint"],
+  parser: "@typescript-eslint/parser",
   ignorePatterns: ["dist"],
   rules: {
-    "react/jsx-no-target-blank": "warn",
     "no-unused-vars": "warn",
+    "@typescript-eslint/no-explicit-any": "off",
   },
 };

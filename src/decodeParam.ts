@@ -11,6 +11,7 @@ const decodeParam = (paramString: string, key: string): string => {
     paramString.replace(
       new RegExp(
         "^(?:.*[&\\?]" +
+          // eslint-disable-next-line no-useless-escape
           encodeURIComponent(key).replace(/[\.\+\*]/g, "\\$&") +
           "(?:\\=([^&]*))?)?.*$",
         "i"

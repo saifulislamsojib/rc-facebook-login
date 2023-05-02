@@ -1,11 +1,15 @@
 import { MouseEvent, useCallback, useEffect, useRef, useState } from "react";
 import decodeParamForKey from "../decodeParam";
 import getParamsFromObject from "../objectToParams";
-import { FacebookLoginOptions } from "../types/facebook";
+import {
+  FB,
+  FacebookLoginOptions,
+  LoginStatusResponse,
+} from "../types/facebook";
 
 declare global {
   interface Window {
-    FB?: any;
+    FB?: FB;
     fbAsyncInit?: any;
   }
 }
@@ -41,7 +45,6 @@ const useFacebookLogin = (props: FacebookLoginOptions) => {
     language = "en_US",
     disableMobileRedirect = false,
     isMobile = getIsMobile(),
-    onFailure = null,
     state = "facebookdirect",
     responseType = "code",
     autoLoad,
@@ -58,8 +61,8 @@ const useFacebookLogin = (props: FacebookLoginOptions) => {
   const isMountedRef = useRef(false);
 
   const responseApi = useCallback(
-    (authResponse: any) => {
-      window.FB.api("/me", { locale: language, fields: fields }, (me: any) => {
+    (authResponse: LoginStatusResponse["authResponse"]) => {
+      window.FB?.api("/me", { locale: language, fields: fields }, (me: any) => {
         Object.assign(me, authResponse);
         callback(me);
       });
@@ -68,30 +71,31 @@ const useFacebookLogin = (props: FacebookLoginOptions) => {
   );
 
   const checkLoginState = useCallback(
-    (response: any) => {
+    (response: LoginStatusResponse) => {
       if (isMountedRef.current) {
         setProcessing(false);
       }
       if (response.authResponse) {
         responseApi(response.authResponse);
       } else {
-        if (onFailure) {
-          onFailure({ status: response.status });
+        if (props.onFailure) {
+          props.onFailure({ status: response.status });
         } else {
-          callback({ status: response.status });
+          props.callback({ status: response.status });
         }
       }
     },
-    [callback, onFailure, responseApi]
+    [responseApi, props]
   );
 
   const checkLoginAfterRefresh = useCallback(
-    (response: any) => {
+    (response: LoginStatusResponse) => {
       if (response.status === "connected") {
         checkLoginState(response);
       } else {
-        window.FB.login(
-          (loginResponse: any) => checkLoginState(loginResponse),
+        window.FB?.login(
+          (loginResponse: LoginStatusResponse) =>
+            checkLoginState(loginResponse),
           true
         );
       }
@@ -117,7 +121,7 @@ const useFacebookLogin = (props: FacebookLoginOptions) => {
         );
       };
       window.fbAsyncInit = () => {
-        window.FB.init({
+        window.FB?.init({
           version: `v${version}`,
           appId,
           xfbml,
@@ -127,20 +131,20 @@ const useFacebookLogin = (props: FacebookLoginOptions) => {
           setSdkLoaded(true);
         }
         if (autoLoad || isRedirectedFromFb()) {
-          window.FB.getLoginStatus(checkLoginAfterRefresh);
+          window.FB?.getLoginStatus(checkLoginAfterRefresh);
         }
       };
     };
 
     const loadSdkAsynchronously = () => {
-      ((d, s, id) => {
-        const element = d.getElementsByTagName(s)[0] as HTMLScriptElement;
+      ((d, s: "script", id) => {
+        const element = d.getElementsByTagName(s)[0];
         const fjs = element;
         let js = element;
         if (d.getElementById(id)) {
           return;
         }
-        js = d.createElement(s) as HTMLScriptElement;
+        js = d.createElement(s);
         js.id = id;
         js.src = `https://connect.facebook.net/${language}/sdk.js`;
         fjs.parentNode?.insertBefore(js, fjs);
@@ -173,7 +177,7 @@ const useFacebookLogin = (props: FacebookLoginOptions) => {
 
   useEffect(() => {
     if (isSdkLoaded && autoLoadState && !autoLoad) {
-      window.FB.getLoginStatus(checkLoginAfterRefresh);
+      window.FB?.getLoginStatus(checkLoginAfterRefresh);
     }
   }, [autoLoad, autoLoadState, checkLoginAfterRefresh, isSdkLoaded]);
 
@@ -213,18 +217,20 @@ const useFacebookLogin = (props: FacebookLoginOptions) => {
       )}`;
     } else {
       if (!window.FB) {
-        if (onFailure) {
-          onFailure({ status: "facebookNotLoaded" });
+        if (props.onFailure) {
+          props.onFailure({ status: "facebookNotLoaded" });
+        } else {
+          props.callback({ status: "facebookNotLoaded" });
         }
 
         return;
       }
 
-      window.FB.getLoginStatus((response: any) => {
+      window.FB.getLoginStatus((response: LoginStatusResponse) => {
         if (response.status === "connected") {
           checkLoginState(response);
         } else {
-          window.FB.login(checkLoginState, {
+          window.FB?.login(checkLoginState, {
             scope,
             return_scopes: returnScopes,
             auth_type: params.auth_type,

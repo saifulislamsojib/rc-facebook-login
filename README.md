@@ -1,6 +1,6 @@
 # rc-facebook-login
 
-A `react` component for Facebook Login. It's a customizable Facebook Login component.
+A `react` component for Facebook Login. It's a customizable Facebook Login component. You can also use hook for Facebook Login.
 
 ## install
 
@@ -13,8 +13,8 @@ yarn add rc-facebook-login
 ## Usage
 
 ```
-    const responseFacebook = (response: ReactFacebookLoginInfo) => {
-        const { name, email, picture, accessToken } = response || {};
+    const responseFacebook = (response: FacebookLoginResponse) => {
+      console.log(response);
     };
 
     return (
@@ -31,8 +31,8 @@ yarn add rc-facebook-login
 ## Customize by render props
 
 ```
-    const responseFacebook = (response: ReactFacebookLoginInfo) => {
-        const { name, email, picture, accessToken } = response || {};
+    const responseFacebook = (response: FacebookLoginResponse) => {
+      console.log(response);
     };
 
     return (
@@ -63,8 +63,8 @@ yarn add rc-facebook-login
 ## Using Hook
 
 ```
-    const responseFacebook = (response: ReactFacebookLoginInfo) => {
-        const { name, email, picture, accessToken } = response || {};
+    const responseFacebook = (response: FacebookLoginResponse) => {
+      console.log(response);
     };
 
     const { disabled, onClick } = useFacebookLogin({
@@ -88,5 +88,52 @@ yarn add rc-facebook-login
         </span>
         Continue with Facebook
       </button>
+    )
+```
+
+## On Failure
+
+```
+    const responseFacebook = (response: FacebookLoginInfo) => {
+      console.log(response);
+    };
+
+    const failureResponse = (response: FacebookFailureResponse) => {
+      console.log(response);
+    };
+
+    return (
+      <FacebookLogin
+        appId={'FB_APP_ID'}
+        fields="name,email,picture"
+        callback={responseFacebook}
+        onFailure={failureResponse}
+        className="third-party-auth"
+        icon={<FacebookIcon />} // you can use any icon library for show icon
+     />
+    )
+```
+
+## Without On Failure Handle Failure
+
+```
+    const responseFacebook = (response: FacebookLoginResponse) => {
+      if("accessToken" in response) {
+        // handle success
+        console.log(response);
+      } else {
+        // handle failure
+        console.log(response);
+      }
+    };
+
+    return (
+      <FacebookLogin
+        appId={'FB_APP_ID'}
+        fields="name,email,picture"
+        callback={responseFacebook}
+        className="third-party-auth"
+        icon={<FacebookIcon />} // you can use any icon library for show icon
+     />
     )
 ```
