@@ -12,128 +12,223 @@ yarn add rc-facebook-login
 
 ## Usage
 
-```
-    const responseFacebook = (response: FacebookLoginResponse) => {
-      console.log(response);
-    };
+```tsx
+import FacebookLogin, { FacebookLoginResponse } from "rc-facebook-login";
+import { BsFacebook } from "react-icons/bs"; // using react icons
 
-    return (
-      <FacebookLogin
-        appId={'FB_APP_ID'}
-        fields="name,email,picture"
-        callback={responseFacebook}
-        className="third-party-auth"
-        icon={<FacebookIcon />} // you can use any icon library for show icon
-     />
-    )
-```
+const App = () => {
+  const responseFacebook = (response: FacebookLoginResponse) => {
+    console.log(response);
+  };
 
-## Customize by render props
+  return (
+    <FacebookLogin
+      appId={"FB_APP_ID"}
+      fields="name,email,picture"
+      callback={responseFacebook}
+      className="facebook-login-button"
+      icon={<BsFacebook />} // you can use any icon library for show icon
+    />
+  );
+};
 
-```
-    const responseFacebook = (response: FacebookLoginResponse) => {
-      console.log(response);
-    };
-
-    return (
-      <FacebookLogin
-        appId={'FB_APP_ID'}
-        fields="name,email,picture"
-        callback={responseFacebook}
-        render={({ disabled, onClick }) => (
-            <button
-                onClick={onClick}
-                disabled={disabled}
-                className="third-party-auth"
-            >
-              <span
-                style={{
-                    marginRight: 5,
-                }}
-              >
-                <FacebookIcon />
-              </span>
-              Continue with Facebook
-            </button>
-        )}
-      />
-    )
+export default App;
 ```
 
-## Using Hook
+### Customize by render props
 
-```
-    const responseFacebook = (response: FacebookLoginResponse) => {
-      console.log(response);
-    };
+```tsx
+import FacebookLogin, { FacebookLoginResponse } from "rc-facebook-login";
+import { BsFacebook } from "react-icons/bs"; // using react icons
 
-    const { disabled, onClick } = useFacebookLogin({
-      appId: 'FB_APP_ID',
-      fields: "name,email,picture",
-      callback: responseFacebook,
-    });
+const App = () => {
+  const responseFacebook = (response: FacebookLoginResponse) => {
+    console.log(response);
+  };
 
-    return (
-      <button
-        onClick={onClick}
-        disabled={disabled}
-        className="third-party-auth"
-      >
-        <span
-            style={{
-                marginRight: 5,
-            }}
+  return (
+    <FacebookLogin
+      appId={"FB_APP_ID"}
+      fields="name,email,picture"
+      callback={responseFacebook}
+      // custom button using render props
+      render={({ disabled, onClick }) => (
+        <button
+          onClick={onClick}
+          disabled={disabled}
+          className="facebook-login-button"
         >
-            <FacebookIcon />
-        </span>
-        Continue with Facebook
-      </button>
-    )
+          <span
+            style={{
+              marginRight: 5,
+            }}
+          >
+            <BsFacebook />
+          </span>
+          Continue with Facebook
+        </button>
+      )}
+    />
+  );
+};
+
+export default App;
 ```
 
-## On Failure
+### Using Hook
 
+```tsx
+import { useFacebookLogin, FacebookLoginResponse } from "rc-facebook-login";
+import { BsFacebook } from "react-icons/bs"; // using react icons
+
+const App = () => {
+  const responseFacebook = (response: FacebookLoginResponse) => {
+    console.log(response);
+  };
+
+  const { disabled, onClick } = useFacebookLogin({
+    appId: "FB_APP_ID",
+    fields: "name,email,picture",
+    callback: responseFacebook,
+  });
+
+  return (
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      className="facebook-login-button"
+    >
+      <span
+        style={{
+          marginRight: 5,
+        }}
+      >
+        <BsFacebook />
+      </span>
+      Continue with Facebook
+    </button>
+  );
+};
+
+export default App;
 ```
-    const responseFacebook = (response: FacebookLoginInfo) => {
+
+### On Failure
+
+##### you can also use it in useFacebookLogin hook
+
+```tsx
+import FacebookLogin, {
+  FacebookFailureResponse,
+  FacebookLoginInfo,
+} from "rc-facebook-login";
+import { BsFacebook } from "react-icons/bs"; // using react icons
+
+const App = () => {
+  // handle success
+  const responseFacebook = (response: FacebookLoginInfo) => {
+    console.log(response);
+  };
+
+  // handle failure
+  const failureResponse = (response: FacebookFailureResponse) => {
+    console.log(response);
+  };
+
+  return (
+    <FacebookLogin
+      appId={"FB_APP_ID"}
+      fields="name,email,picture"
+      callback={responseFacebook}
+      onFailure={failureResponse}
+      className="facebook-login-button"
+      icon={<BsFacebook />} // you can use any icon library for show icon
+    />
+  );
+};
+
+export default App;
+```
+
+### Without onFailure Handle Failure
+
+##### you can also use it in useFacebookLogin hook
+
+```tsx
+import FacebookLogin, { FacebookLoginResponse } from "rc-facebook-login";
+import { BsFacebook } from "react-icons/bs"; // using react icons
+
+const App = () => {
+  const responseFacebook = (response: FacebookLoginResponse) => {
+    if ("id" in response) {
+      // handle success
       console.log(response);
-    };
-
-    const failureResponse = (response: FacebookFailureResponse) => {
+    } else {
+      // handle failure
       console.log(response);
-    };
+    }
+  };
 
-    return (
-      <FacebookLogin
-        appId={'FB_APP_ID'}
-        fields="name,email,picture"
-        callback={responseFacebook}
-        onFailure={failureResponse}
-        className="third-party-auth"
-        icon={<FacebookIcon />} // you can use any icon library for show icon
-     />
-    )
+  return (
+    <FacebookLogin
+      appId={"FB_APP_ID"}
+      fields="name,email,picture"
+      callback={responseFacebook}
+      className="facebook-login-button"
+      icon={<BsFacebook />} // you can use any icon library for show icon
+    />
+  );
+};
+
+export default App;
 ```
 
-## Without On Failure Handle Failure
+### handle Loading
 
+##### you can also use it in useFacebookLogin hook
+
+```tsx
+import FacebookLogin, { FacebookLoginResponse } from "rc-facebook-login";
+import { useState } from "react";
+import { BsFacebook } from "react-icons/bs"; // using react icons
+
+const App = () => {
+  const [loading, setLoading] = useState(false);
+
+  const responseFacebook = (response: FacebookLoginResponse) => {
+    setLoading(false); // set loading to false
+    console.log(response);
+  };
+
+  return (
+    <FacebookLogin
+      appId={"FB_APP_ID"}
+      fields="name,email,picture"
+      callback={responseFacebook}
+      className="facebook-login-button"
+      onClick={() => setLoading(true)} // set loading to true
+      isDisabled={loading} // disable the button when loading
+      disableClassName="button-disable" // disable className
+      icon={<BsFacebook />} // you can use any icon library for show icon
+      textButton={loading ? "Login processing..." : "Continue with Facebook"}
+    />
+  );
+};
+
+export default App;
 ```
-    const responseFacebook = (response: FacebookLoginResponse) => {
-      if("accessToken" in response) {
-        // handle success
-        console.log(response);
-      } else {
-        // handle failure
-        console.log(response);
-      }
-    };
 
-    return (
-      <FacebookLogin
-        appId={'FB_APP_ID'}
-        fields="name,email,picture"
-        callback={responseFacebook}
-        className="third-party-auth"
-        icon={<FacebookIcon />} // you can use any icon library for show icon
-     />
-    )
+### Import specific files
+
+```tsx
+// FacebookLogin component import
+import FacebookLogin from "rc-facebook-login/dist/FacebookLogin";
+// useFacebookLogin hook import
+import useFacebookLogin from "rc-facebook-login/dist/hooks/useFacebookLogin";
+// import types from rc-facebook-login
+import {
+  FacebookLoginResponse,
+  FacebookFailureResponse,
+  FacebookLoginInfo,
+} from "rc-facebook-login/dist/types/facebook";
 ```

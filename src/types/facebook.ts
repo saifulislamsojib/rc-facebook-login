@@ -56,6 +56,8 @@ interface FacebookLoginOnlyComponentProps {
   tag?: ElementType;
   // eslint-disable-next-line no-unused-vars
   render?(props: FacebookLoginRenderProps): JSX.Element;
+  disableClassName?: string;
+  disableOpacity?: number;
 }
 
 export type FacebookLoginProps = FacebookLoginOnlyComponentProps &

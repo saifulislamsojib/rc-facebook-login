@@ -3,10 +3,10 @@ export default FacebookLogin;
 
 export { default as useFacebookLogin } from "./hooks/useFacebookLogin";
 export {
-  FacebookLoginOptions,
-  FacebookLoginProps,
-  FacebookLoginResponse,
   FacebookFailureResponse,
   FacebookLoginInfo,
+  FacebookLoginOptions,
+  FacebookLoginProps,
   FacebookLoginRenderProps,
+  FacebookLoginResponse,
 } from "./types/facebook";

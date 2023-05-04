@@ -14,6 +14,9 @@ const isHasAddDisabledProp = (tag: ElementType) =>
     "fieldset",
   ].indexOf((tag + "").toLowerCase()) >= 0;
 
+const classNames = (...args: (string | undefined | false)[]) =>
+  args.filter(Boolean).join(" ");
+
 const FacebookLogin = ({
   style = {},
   className,
@@ -21,11 +24,17 @@ const FacebookLogin = ({
   textButton = "Continue with Facebook",
   typeButton = "button",
   tag: Tag = "button",
+  disableClassName,
+  disableOpacity = 0.6,
   render = ({ onClick, disabled }) => {
     const tagProps: ComponentProps<"button"> = {
       onClick,
-      className,
     };
+
+    const classes = classNames(className, disableClassName);
+    if (classes) {
+      tagProps.className = classes;
+    }
 
     if (isHasAddDisabledProp(Tag) && disabled) {
       tagProps.disabled = true;
@@ -43,7 +52,7 @@ const FacebookLogin = ({
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          opacity: tagProps.disabled ? 0.6 : 1,
+          opacity: tagProps.disabled ? disableOpacity : 1,
         }}
       >
         {icon && (
@@ -95,4 +104,6 @@ FacebookLogin.propTypes = {
   textButton: PropTypes.string,
   typeButton: PropTypes.string,
   tag: PropTypes.node,
+  disableClassName: PropTypes.string,
+  disableOpacity: PropTypes.number,
 };
