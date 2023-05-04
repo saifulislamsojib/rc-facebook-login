@@ -10,7 +10,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "min": "npx google-closure-compiler --js=build/index.js --js_output_file=dist/index.js && npx google-closure-compiler --js=build/hooks/useFacebookLogin.js --js_output_file=dist/hooks/useFacebookLogin.js && npx google-closure-compiler --js=build/decodeParam.js --js_output_file=dist/decodeParam.js && npx google-closure-compiler --js=build/FacebookLogin.js --js_output_file=dist/FacebookLogin.js && npx google-closure-compiler --js=build/objectToParams.js --js_output_file=dist/objectToParams.js",
-    "cpd.ts": "cp build/**.d.ts dist/ && cp build/types/**.d.ts dist/types/ && cp build/hooks/**.d.ts dist/hooks/",
+    "mk:types": "cd dist && mkdir types && cd ..",
+    "cpd.ts": "cp build/**.d.ts dist/ && yarn mk:types && cp build/types/**.d.ts dist/types/ && cp build/hooks/**.d.ts dist/hooks/",
     "d:build": "rm -r build",
     "d:dist": "rm -f -r dist",
     "build": "yarn d:dist && tsc -p . && yarn min && yarn cpd.ts && yarn d:build",
