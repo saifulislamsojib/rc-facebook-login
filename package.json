@@ -1,6 +1,6 @@
 {
   "name": "rc-facebook-login",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "A react component for Facebook Login. It's a customizable Facebook Login component.",
   "main": "dist/index.js",
   "repository": {
@@ -9,8 +9,12 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc -p .",
-    "npm:publish": "yarn build && npm publish"
+    "min": "npx google-closure-compiler --js=build/index.js --js_output_file=dist/index.js && npx google-closure-compiler --js=build/hooks/useFacebookLogin.js --js_output_file=dist/hooks/useFacebookLogin.js && npx google-closure-compiler --js=build/decodeParam.js --js_output_file=dist/decodeParam.js && npx google-closure-compiler --js=build/FacebookLogin.js --js_output_file=dist/FacebookLogin.js && npx google-closure-compiler --js=build/objectToParams.js --js_output_file=dist/objectToParams.js",
+    "cpd.ts": "cp build/**.d.ts dist/ && cp -r build/types dist/types && cp build/hooks/**.d.ts dist/hooks/",
+    "d:build": "rm -r build",
+    "d:dist": "rm -f -r dist",
+    "build": "yarn d:dist && tsc -p . && yarn min && yarn cpd.ts && yarn d:build",
+    "n:publish": "yarn build && npm publish"
   },
   "author": "https://github.com/saifulislamsojib",
   "license": "MIT",
@@ -22,6 +26,7 @@
     "eslint": "^8.39.0",
     "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-react-hooks": "^4.6.0",
+    "google-closure-compiler": "20230411.0.0",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -32,14 +37,15 @@
     "react-dom": "^18.2.0"
   },
   "keywords": [
-    "react-fb-login",
+    "rc-facebook-login",
     "react-facebook-login",
+    "react-facebook",
     "facebook-login",
     "facebook-login-react",
-    "rc-facebook-login",
     "@react-oauth/fb",
     "fb-oauth",
-    "facebook-oauth",
-    "facebook-login"
+    "react-fb-login",
+    "@react-oauth/facebook",
+    "facebook-oauth"
   ]
 }

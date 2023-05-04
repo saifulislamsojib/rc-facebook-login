@@ -21,7 +21,7 @@ module.exports = {
   },
   plugins: ["react", "react-hooks", "@typescript-eslint"],
   parser: "@typescript-eslint/parser",
-  ignorePatterns: ["dist"],
+  ignorePatterns: ["dist", "build"],
   rules: {
     "no-unused-vars": "warn",
     "@typescript-eslint/no-explicit-any": "off",
